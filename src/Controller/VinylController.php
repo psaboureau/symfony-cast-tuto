@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Controller;
 
@@ -11,7 +11,7 @@ use function Symfony\Component\String\u;
 class VinylController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
-    public function homepage() : Response
+    public function homepage(): Response
     {
 
         $tracks = [
@@ -27,17 +27,43 @@ class VinylController extends AbstractController
             'title' => 'PB & Jams',
             'tracks' => $tracks,
         ]);
-
     }
 
     #[Route('/browse/{slug}', name: 'app_browse')]
-    public function browse(string $slug = null) : Response
+    public function browse(string $slug = null): Response
     {
         $genre = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
+        $mixes = $this->getMixes();
+
 
         return $this->render('vinyl/browse.html.twig', [
-            'genre' => $genre,    
+            'genre' => $genre,
+            'mixes' => $mixes,
         ]);
+    }
 
+    private function getMixes(): array
+    {
+        // temporry fake "mixes" data
+        return [
+            [
+                'title' => 'Barter 6',
+                'trackCount' => 14,
+                'genre' => 'Thug',
+                'createdAt' => new \DateTime('2016-10-30'),
+            ],
+            [
+                'title' => 'Blonde',
+                'trackCount' => 12,
+                'genre' => 'Océanique',
+                'createdAt' => new \DateTime(('2021-10-02')),
+            ],
+            [
+                'title' => 'Thunder',
+                'trackCount' => 25,
+                'genre' => 'Rock',
+                'createdAt' => new \DateTime(('2021-01-02')),
+            ],
+        ];
     }
 }

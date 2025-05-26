@@ -15,16 +15,12 @@ export default class extends Controller {
     infoUrl: String,
   };
 
-
-
-
   play(event) {
     event.preventDefault();
 
-    axios.get(this.infoUrlValue)
-         .then((response) => {
-            const audio = new Audio(response.data.url);
-            audio.play();
-         })
+    axios.get(this.infoUrlValue).then((response) => {
+      const audio = new Audio(response.data.url);
+      audio.play();
+    });
   }
 }
