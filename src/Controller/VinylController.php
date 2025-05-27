@@ -5,6 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 use function Symfony\Component\String\u;
 
 
@@ -30,11 +32,11 @@ class VinylController extends AbstractController
     }
 
     #[Route('/browse/{slug}', name: 'app_browse')]
-    public function browse(string $slug = null): Response
+    public function browse(HttpClientInterface $httpClient, string $slug = null): Response
     {
         $genre = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
-        $mixes = $this->getMixes();
-
+        $response = $httpClient->request('GET', 'https://raw.githubusercontent.com/SymfonyCasts/vinyl-mixes/main/mixes.json');
+        $mixes = $response->toArray();
 
         return $this->render('vinyl/browse.html.twig', [
             'genre' => $genre,
@@ -42,28 +44,4 @@ class VinylController extends AbstractController
         ]);
     }
 
-    private function getMixes(): array
-    {
-        // temporry fake "mixes" data
-        return [
-            [
-                'title' => 'Barter 6',
-                'trackCount' => 14,
-                'genre' => 'Thug',
-                'createdAt' => new \DateTime('2016-10-30'),
-            ],
-            [
-                'title' => 'Blonde',
-                'trackCount' => 12,
-                'genre' => 'Océanique',
-                'createdAt' => new \DateTime(('2021-10-02')),
-            ],
-            [
-                'title' => 'Thunder',
-                'trackCount' => 25,
-                'genre' => 'Rock',
-                'createdAt' => new \DateTime(('2021-01-02')),
-            ],
-        ];
-    }
 }
