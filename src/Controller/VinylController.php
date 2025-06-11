@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 use function Symfony\Component\String\u;
 
 
@@ -31,6 +30,7 @@ class VinylController extends AbstractController
             'title' => 'PB & Jams',
             'tracks' => $tracks,
         ]);
+
     }
 
     #[Route('/browse/{slug}', name: 'app_browse')]
